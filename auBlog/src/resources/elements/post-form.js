@@ -1,17 +1,17 @@
 import { bindable } from 'aurelia-framework';
 import { inject } from 'aurelia-framework';
-import { Router } from 'aurelia-router';
-import { EventAggregator } from 'aurelia-event-aggregator';
+import { ValidationRules, ValidationControllerFactory, validationMessages } from 'aurelia-validation';
 
 import { PostService } from '../../common/services/post-service';
 
-@inject(PostService)
+@inject(PostService, ValidationControllerFactory)
 export class PostForm {
   @bindable post;
   @bindable title;
 
-  constructor(PostService) {
+  constructor(PostService, ValidationControllerFactory) {
     this.postService = PostService;
+    this.controller = ValidationControllerFactory.createForCurrentScope();
   }
 
   addTag() {
@@ -31,7 +31,22 @@ export class PostForm {
       });
   }
 
-  valueChanged(newValue, oldValue) {}
+  postChanged(newValue, oldValue) {
+    if (this.post) {
+      validationMessages['required'] = `U must enter a \${$displayName}`;
+
+      ValidationRules.ensure('title')
+        .displayName('Title')
+        .required()
+        .minLength(5)
+        .ensure('body')
+        .displayName('Body')
+        .required()
+        .on(this.post);
+
+      this.controller.validate();
+    }
+  }
 
   submit() {}
 }

@@ -1,5 +1,5 @@
 import environment from './environment';
-import {PLATFORM} from 'aurelia-pal';
+import { PLATFORM } from 'aurelia-pal';
 import '@babel/polyfill';
 import * as Bluebird from 'bluebird';
 
@@ -9,7 +9,8 @@ Bluebird.config({ warnings: { wForgottenReturn: false } });
 export function configure(aurelia) {
   aurelia.use
     .standardConfiguration()
-    .feature(PLATFORM.moduleName('resources/index'));
+    .feature(PLATFORM.moduleName('resources/index'))
+    .plugin(PLATFORM.moduleName('aurelia-validation'));
 
   // Uncomment the line below to enable animation.
   // aurelia.use.plugin(PLATFORM.moduleName('aurelia-animator-css'));
