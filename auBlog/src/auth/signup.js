@@ -9,12 +9,9 @@ export class Signup {
     this.authService = AuthService;
     this.ea = EventAggregator;
     this.router = Router;
-    this.error = null;
   }
 
   signup() {
-    this.error = null;
-
     this.authService
       .signup(this.name)
       .then(user => {
@@ -22,7 +19,10 @@ export class Signup {
         this.router.navigateToRoute('home');
       })
       .catch(error => {
-        this.error = error.message;
+        this.ea.publish('notification', {
+          type: 'error',
+          message: error.message
+        });
       });
   }
 }

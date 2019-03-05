@@ -17,10 +17,17 @@ export class NewPost {
       .create(this.post)
       .then(data => {
         this.ea.publish('post-updated', Date());
+        this.ea.publish('notification', {
+          type: 'success',
+          message: 'Post Created'
+        });
         this.router.navigateToRoute('post-view', { id: data.slug });
       })
       .catch(error => {
-        this.error = error;
+        this.ea.publish('notification', {
+          type: 'error',
+          message: error.message
+        });
       });
   }
 

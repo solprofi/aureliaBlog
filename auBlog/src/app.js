@@ -1,8 +1,11 @@
 import { PLATFORM } from 'aurelia-pal';
 import { inject } from 'aurelia-framework';
+import { EventAggregator } from 'aurelia-event-aggregator';
+import * as toastr from 'toastr';
+
 import { PostService } from './common/services/post-service';
 import { AuthService } from './common/services/auth-service';
-import { EventAggregator } from 'aurelia-event-aggregator';
+import { AuthorizeStep } from './pipeline-steps/authorize-step';
 
 @inject(PostService, AuthService, EventAggregator)
 export class App {
@@ -22,6 +25,17 @@ export class App {
     this.postSubscription = this.ea.subscribe('post-updated', updatedAt => {
       this.updateSidebar();
     });
+
+    this.notificationSubscription = this.ea.subscribe('notification', notification => {
+      toastr[notification.type](notification.message);
+    });
+  }
+
+  publishNotification(type, message) {
+    this.ea.publish('notification', {
+      type,
+      message
+    });
   }
 
   updateSidebar() {
@@ -31,7 +45,7 @@ export class App {
         this.tags = data.tags;
       })
       .catch(error => {
-        this.error = error.message;
+        this.publishNotification('error', error.message);
       });
 
     this.postService
@@ -40,13 +54,16 @@ export class App {
         this.archives = data.archives;
       })
       .catch(error => {
-        this.error = error.message;
+        this.publishNotification('error', error.message);
       });
   }
 
   configureRouter(config, router) {
     this.router = router;
+
     config.title = "Romans's blog";
+    config.addAuthorizeStep(AuthorizeStep);
+
     config.map([
       { route: '', name: 'home', moduleId: PLATFORM.moduleName('posts/index'), title: 'All Posts' },
       { route: 'post/:id', name: 'post-view', moduleId: PLATFORM.moduleName('posts/post'), title: 'View Post' },
@@ -54,7 +71,8 @@ export class App {
         route: 'post/:id/edit',
         name: 'post-edit',
         moduleId: PLATFORM.moduleName('posts/edit-post'),
-        title: 'Edit Post'
+        title: 'Edit Post',
+        settings: { auth: true }
       },
       {
         route: 'tag/:tag',
@@ -74,7 +92,8 @@ export class App {
         route: 'create-post',
         name: 'create-post',
         moduleId: PLATFORM.moduleName('posts/new-post'),
-        title: 'Create Post'
+        title: 'Create Post',
+        settings: { auth: true }
       }
     ]);
   }
@@ -82,6 +101,7 @@ export class App {
   detached() {
     this.subscription.dispose();
     this.postSubscription.dispose();
+    this.notificationSubscription.dispose();
   }
 
   logout() {
@@ -89,9 +109,11 @@ export class App {
       .logout()
       .then(data => {
         this.ea.publish('user', null);
+        this.publishNotification('success', 'Logged out successfully');
+        this.router.navigateToRoute('home');
       })
       .catch(error => {
-        this.error = error;
+        this.publishNotification('error', error.message);
       });
   }
 }

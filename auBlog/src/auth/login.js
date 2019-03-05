@@ -11,12 +11,14 @@ export class Login {
     this.ea = EventAggregator;
   }
 
-  activate() {
-    this.error = null;
+  publishNotification(type, message) {
+    this.ea.publish('notification', {
+      type,
+      message
+    });
   }
 
   login() {
-    this.error = null;
     this.authService
       .login(this.name)
       .then(data => {
@@ -24,7 +26,10 @@ export class Login {
         this.router.navigateToRoute('home');
       })
       .catch(error => {
-        this.error = error.message;
+        this.ea.publish('notification', {
+          type: 'error',
+          message: error.message
+        });
       });
   }
 }

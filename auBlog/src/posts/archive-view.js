@@ -1,11 +1,13 @@
 import { inject } from 'aurelia-framework';
+import { EventAggregator } from 'aurelia-event-aggregator';
+
 import { PostService } from '../common/services/post-service';
 
-@inject(PostService)
+@inject(PostService, EventAggregator)
 export class ArchiveView {
-  constructor(PostService) {
-    this.message = 'Hello world';
+  constructor(PostService, EventAggregator) {
     this.postService = PostService;
+    this.ea = EventAggregator;
   }
 
   activate(params) {
@@ -16,7 +18,10 @@ export class ArchiveView {
         this.posts = data.posts;
       })
       .catch(error => {
-        this.error = error.message;
+        this.ea.publish('notification', {
+          type: 'error',
+          message: error.message
+        });
       });
   }
 }
