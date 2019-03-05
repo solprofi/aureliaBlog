@@ -18,6 +18,13 @@ export class App {
       this.currentUser = this.authService.currentUser;
     });
 
+    this.updateSidebar();
+    this.postSubscription = this.ea.subscribe('post-updated', updatedAt => {
+      this.updateSidebar();
+    });
+  }
+
+  updateSidebar() {
     this.postService
       .allTags()
       .then(data => {
@@ -68,6 +75,7 @@ export class App {
 
   detached() {
     this.subscription.dispose();
+    this.postSubscription.dispose();
   }
 
   logout() {
@@ -77,7 +85,7 @@ export class App {
         this.ea.publish('user', null);
       })
       .catch(error => {
-        console.log(error.message);
+        this.error = error;
       });
   }
 }
