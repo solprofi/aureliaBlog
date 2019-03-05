@@ -51,6 +51,12 @@ export class App {
       { route: '', name: 'home', moduleId: PLATFORM.moduleName('posts/index'), title: 'All Posts' },
       { route: 'post/:id', name: 'post-view', moduleId: PLATFORM.moduleName('posts/post'), title: 'View Post' },
       {
+        route: 'post/:id/edit',
+        name: 'post-edit',
+        moduleId: PLATFORM.moduleName('posts/edit-post'),
+        title: 'Edit Post'
+      },
+      {
         route: 'tag/:tag',
         name: 'tag-view',
         moduleId: PLATFORM.moduleName('posts/tag-view'),

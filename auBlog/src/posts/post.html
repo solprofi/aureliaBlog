@@ -6,4 +6,10 @@
   </div>
 
   <blog-post post.bind="post"></blog-post>
+  <a
+    if.bind="authService.currentUser === post.author"
+    route-href="route: post-edit; params.bind: {id: post.slug}"
+    class="btn btn-primary"
+    >Edit Post</a
+  >
 </template>
