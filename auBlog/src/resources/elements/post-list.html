@@ -5,8 +5,8 @@
     ${error}
   </div>
 
-  <div class="alert alert-dark" if.bind="title">
-    ${title}
+  <div class="alert alert-dark">
+    <slot></slot>
   </div>
 
   <div repeat.for="post of posts">

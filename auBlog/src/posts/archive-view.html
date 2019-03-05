@@ -1,4 +1,6 @@
 <template>
   <require from="../resources/elements/post-list.html"></require>
-  <post-list error.bind="error" title.bind="title" posts.bind="posts"></post-list>
+  <post-list error.bind="error" posts.bind="posts">
+    Viewing posts from ${archive}
+  </post-list>
 </template>

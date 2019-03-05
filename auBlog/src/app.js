@@ -15,7 +15,6 @@ export class App {
   attached() {
     this.currentUser = this.authService.currentUser;
     this.subscription = this.ea.subscribe('user', user => {
-      console.log('here', this.authService.currentUser);
       this.currentUser = this.authService.currentUser;
     });
 
@@ -56,7 +55,8 @@ export class App {
         moduleId: PLATFORM.moduleName('posts/archive-view'),
         title: 'View Post By Asrchive'
       },
-      { route: 'login', name: 'login', moduleId: PLATFORM.moduleName('auth/login'), title: 'Login' }
+      { route: 'login', name: 'login', moduleId: PLATFORM.moduleName('auth/login'), title: 'Login' },
+      { route: 'signup', name: 'signup', moduleId: PLATFORM.moduleName('auth/signup'), title: 'Sign up' }
     ]);
   }
 
