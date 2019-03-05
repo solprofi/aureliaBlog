@@ -9,15 +9,23 @@
           class="blog-nav-item ${router.currentInstruction.config.name === 'login' && 'active'}"
           route-href="login"
           if.bind="!currentUser"
-          >Log In</a
         >
+          Log In
+        </a>
         <a
           class="blog-nav-item  ${router.currentInstruction.config.name === 'signup' && 'active'}"
           route-href="signup"
           if.bind="!currentUser"
-          >Sign Up</a
         >
-        <a class="blog-nav-item" href="#" if.bind="currentUser">New Post</a>
+          Sign Up
+        </a>
+        <a
+          class="blog-nav-item ${router.currentInstruction.config.name === 'create-post' && 'active'}"
+          route-href="create-post"
+          if.bind="currentUser"
+        >
+          New Post
+        </a>
         <a class="blog-nav-item" href="#" if.bind="currentUser" click.delegate="logout()">Log Out</a>
       </nav>
     </div>

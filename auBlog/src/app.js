@@ -56,7 +56,13 @@ export class App {
         title: 'View Post By Asrchive'
       },
       { route: 'login', name: 'login', moduleId: PLATFORM.moduleName('auth/login'), title: 'Login' },
-      { route: 'signup', name: 'signup', moduleId: PLATFORM.moduleName('auth/signup'), title: 'Sign up' }
+      { route: 'signup', name: 'signup', moduleId: PLATFORM.moduleName('auth/signup'), title: 'Sign up' },
+      {
+        route: 'create-post',
+        name: 'create-post',
+        moduleId: PLATFORM.moduleName('posts/new-post'),
+        title: 'Create Post'
+      }
     ]);
   }
 
